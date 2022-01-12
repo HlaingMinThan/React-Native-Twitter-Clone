@@ -53,7 +53,11 @@ function StackNavigator() {
   const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator screenOptions={{ title: "" }}>
-      <Stack.Screen name="Tab" component={TabNavigator} />
+      <Stack.Screen
+        name="Tab"
+        component={TabNavigator}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="New Tweet" component={NewTweetScreen} />
       <Stack.Screen name="Tweet Detail" component={TweetDetailScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
@@ -63,7 +67,10 @@ function StackNavigator() {
 function DrawerNavigator() {
   const Drawer = createDrawerNavigator();
   return (
-    <Drawer.Navigator initialRouteName="Home">
+    <Drawer.Navigator
+      initialRouteName="Home"
+      screenOptions={{ swipeEnabled: false }}
+    >
       <Drawer.Screen name="Home" component={StackNavigator} />
       <Drawer.Screen name="Profile" component={ProfileScreen} />
       <Drawer.Screen name="Setting" component={SettingScreen} />
