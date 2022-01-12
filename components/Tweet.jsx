@@ -31,7 +31,7 @@ export default function Tweet({ title, navigation }) {
         </View>
         <View>
           <TouchableOpacity onPress={goToTweetDetail}>
-            <Text style={styles.tweetContent}>
+            <Text style={styles.tweetContent} numberOfLines={3}>
               Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illum,
               sunt! Magnam quasi numquam odit eius minima, error repellendus
               quam. Maxime?
@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
     color: "gray",
   },
   tweetContent: {
+    marginVertical: 5,
     lineHeight: 20,
   },
   avatar: {
