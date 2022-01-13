@@ -1,7 +1,8 @@
 import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import Tweet from "../components/Tweet";
-
+import { AntDesign } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
 export default function HomeScreen({ navigation }) {
   const tweets = [
     {
@@ -33,7 +34,9 @@ export default function HomeScreen({ navigation }) {
       title: "Seventh Item",
     },
   ];
-
+  const goToNewTweet = () => {
+    navigation.navigate("New Tweet");
+  };
   const renderItem = ({ item }) => (
     <Tweet title={item.title} navigation={navigation} />
   );
@@ -45,11 +48,15 @@ export default function HomeScreen({ navigation }) {
         renderItem={renderItem}
         keyExtractor={(tweet) => tweet.id}
       />
+      <TouchableOpacity style={styles.addBtn} onPress={goToNewTweet}>
+        <AntDesign name="plus" size={24} color="white" />
+      </TouchableOpacity>
     </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: "white",
     paddingLeft: 15,
   },
@@ -57,5 +64,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#e5e7eb",
     marginVertical: 8,
+  },
+  addBtn: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: "#0092ef",
+    position: "absolute",
+    bottom: 25,
+    right: 20,
   },
 });
