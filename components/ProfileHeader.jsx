@@ -16,7 +16,7 @@ export default function ProfileHeader() {
       <View style={styles.profileContainer}>
         <Image
           source={{
-            uri: `https://scontent-sin6-3.xx.fbcdn.net/v/t39.30808-6/269623673_457487799300811_7786968828914308075_n.jpg?_nc_cat=106&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=dzACxwoveW8AX_2lvFh&_nc_ht=scontent-sin6-3.xx&oh=00_AT-eRDX9fzv3hgsDvfDlYM2WD5C7rhy6nOFC2S9_wAzLjQ&oe=61E3B184`,
+            uri: `https://i.pravatar.cc/150?img=39`,
           }}
           style={styles.avatar}
         ></Image>

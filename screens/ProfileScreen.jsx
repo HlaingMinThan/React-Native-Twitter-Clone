@@ -4,37 +4,51 @@ import Tweet from "../components/Tweet";
 export default function ProfileScreen({ navigation }) {
   const tweets = [
     {
-      id: "1",
-      title: "First Item",
+      id: 1,
+      user_id: 1,
+      body: "inventore",
+      created_at: "2022-01-13T08:52:21.000000Z",
+      updated_at: "2022-01-13T08:52:21.000000Z",
+      user: {
+        id: 1,
+        name: "Hlaing Min Than",
+        username: "faizal",
+        avatar: "https://i.pravatar.cc/150?img=39",
+        created_at: "2022-01-13T09:10:48.000000Z",
+      },
     },
     {
-      id: "2",
-      title: "Second Item",
+      id: 2,
+      user_id: 1,
+      body: "inventore",
+      created_at: "2022-01-13T08:52:21.000000Z",
+      updated_at: "2022-01-13T08:52:21.000000Z",
+      user: {
+        id: 1,
+        name: "Hlaing Min Than",
+        username: "faizal",
+        avatar: "https://i.pravatar.cc/150?img=39",
+        created_at: "2022-01-13T09:10:48.000000Z",
+      },
     },
     {
-      id: "3",
-      title: "Third Item",
-    },
-    {
-      id: "4",
-      title: "Fourth Item",
-    },
-    {
-      id: "5",
-      title: "Fifth Item",
-    },
-    {
-      id: "6",
-      title: "Sixth Item",
-    },
-    {
-      id: "7",
-      title: "Seventh Item",
+      id: 3,
+      user_id: 1,
+      body: "inventore",
+      created_at: "2022-01-13T08:52:21.000000Z",
+      updated_at: "2022-01-13T08:52:21.000000Z",
+      user: {
+        id: 1,
+        name: "Hlaing Min Than",
+        username: "faizal",
+        avatar: "https://i.pravatar.cc/150?img=39",
+        created_at: "2022-01-13T09:10:48.000000Z",
+      },
     },
   ];
   const renderItem = ({ item, index }) => (
     <View style={[styles.ml10, index === 0 ? styles.mt10 : ""]}>
-      <Tweet title={item.title} navigation={navigation} />
+      <Tweet tweet={item} navigation={navigation} />
     </View>
   );
   return (

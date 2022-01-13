@@ -2,7 +2,8 @@ import React from "react";
 import { View, Image, Text, StyleSheet, Platform } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
-export default function Tweet({ title, navigation }) {
+import moment from "moment";
+export default function Tweet({ tweet, navigation }) {
   const goToProfile = () => {
     navigation.navigate("Profile");
   };
@@ -14,27 +15,27 @@ export default function Tweet({ title, navigation }) {
       <View style={styles.tweetAvatarContainer}>
         <TouchableOpacity onPress={goToProfile}>
           <Image
-            source={{ uri: `https://reactjs.org/logo-og.png` }}
+            source={{ uri: tweet.user.avatar }}
             style={styles.avatar}
           ></Image>
         </TouchableOpacity>
       </View>
       <View style={styles.tweetInfoContainer}>
         <View style={styles.tweetMetaContainer}>
-          <TouchableOpacity onPress={goToTweetDetail}>
-            <Text style={styles.tweetTitle}>{title}</Text>
+          <TouchableOpacity onPress={goToProfile}>
+            <Text style={styles.name}>{tweet.user.name}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={goToProfile}>
-            <Text style={styles.tweetMeta}>@Faizal</Text>
+            <Text style={styles.tweetMeta}>@{tweet.user.username}</Text>
           </TouchableOpacity>
-          <Text style={styles.tweetMeta}>9m</Text>
+          <Text style={styles.tweetMeta}>
+            {moment(tweet.created_at).fromNow()}
+          </Text>
         </View>
         <View>
           <TouchableOpacity onPress={goToTweetDetail}>
             <Text style={styles.tweetContent} numberOfLines={3}>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illum,
-              sunt! Magnam quasi numquam odit eius minima, error repellendus
-              quam. Maxime?
+              {tweet.body}
             </Text>
           </TouchableOpacity>
         </View>
