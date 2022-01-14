@@ -2,7 +2,10 @@ import React from "react";
 import { View, Image, Text, StyleSheet, Platform } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
-import moment from "moment";
+import { formatDistanceToNowStrict } from "date-fns";
+import formatDistance from "../helpers/formatDistance";
+import locale from "date-fns/locale/en-US";
+
 export default function Tweet({ tweet, navigation }) {
   const goToProfile = () => {
     navigation.navigate("Profile");
@@ -29,7 +32,12 @@ export default function Tweet({ tweet, navigation }) {
             <Text style={styles.tweetMeta}>@{tweet.user.username}</Text>
           </TouchableOpacity>
           <Text style={styles.tweetMeta}>
-            {moment(tweet.created_at).fromNow()}
+            {formatDistanceToNowStrict(new Date(tweet.created_at), {
+              locale: {
+                ...locale,
+                formatDistance,
+              },
+            })}
           </Text>
         </View>
         <View>
