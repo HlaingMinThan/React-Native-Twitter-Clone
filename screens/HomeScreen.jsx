@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View, ActivityIndicator } from "react-native";
 import Tweet from "../components/Tweet";
 
 import axios from "axios";
 import TweetAddBtn from "../components/TweetAddBtn";
 export default function HomeScreen({ navigation }) {
   const [tweets, setTweets] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const getAllTweets = async () => {
     try {
       const res = await axios.get("http://localhost:8000/api/tweets");
       setTweets(res.data);
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -22,12 +25,20 @@ export default function HomeScreen({ navigation }) {
   );
   return (
     <View style={styles.container}>
-      <FlatList
-        ItemSeparatorComponent={() => <View style={styles.seperator}></View>}
-        data={tweets}
-        renderItem={renderItem}
-        keyExtractor={(tweet) => tweet.id}
-      />
+      {isLoading ? (
+        <ActivityIndicator
+          color="#0092ef"
+          size="large"
+          style={styles.loading}
+        ></ActivityIndicator>
+      ) : (
+        <FlatList
+          ItemSeparatorComponent={() => <View style={styles.seperator}></View>}
+          data={tweets}
+          renderItem={renderItem}
+          keyExtractor={(tweet) => tweet.id}
+        />
+      )}
       <TweetAddBtn />
     </View>
   );
@@ -42,5 +53,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#e5e7eb",
     marginVertical: 8,
+  },
+  loading: {
+    marginVertical: 10,
   },
 });
