@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, View, ActivityIndicator } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import Tweet from "../components/Tweet";
+import Loading from "../components/Loading";
 import axios from "axios";
 import TweetAddBtn from "../components/TweetAddBtn";
 
@@ -37,7 +38,7 @@ export default function HomeScreen({ navigation }) {
     }
   };
 
-  const handleRefresh = () => {
+  const pullToRefresh = () => {
     setPage(1);
     getAllTweets(); //this is added because if the page is already 1 ,this function will not automatically call with useEffect
     setIsRefreshing(true);
@@ -52,14 +53,10 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       {isLoading ? (
-        <ActivityIndicator
-          color="#0092ef"
-          size="large"
-          style={styles.loading}
-        ></ActivityIndicator>
+        <Loading />
       ) : (
         <FlatList
-          onRefresh={handleRefresh}
+          onRefresh={pullToRefresh}
           refreshing={isRefreshing}
           ItemSeparatorComponent={() => <View style={styles.seperator}></View>}
           data={tweets}
@@ -69,15 +66,7 @@ export default function HomeScreen({ navigation }) {
           keyExtractor={(tweet) => tweet.id}
           onEndReached={handleEndReached}
           onEndReachedThreshold={0} //how far from bottom of the lists
-          ListFooterComponent={
-            isEndScrollLoading && (
-              <ActivityIndicator
-                color="#0092ef"
-                size="large"
-                style={styles.loading}
-              ></ActivityIndicator>
-            )
-          }
+          ListFooterComponent={isEndScrollLoading && <Loading />}
         />
       )}
       <TweetAddBtn />
@@ -94,8 +83,5 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#e5e7eb",
     marginVertical: 8,
-  },
-  loading: {
-    marginVertical: 10,
   },
 });
