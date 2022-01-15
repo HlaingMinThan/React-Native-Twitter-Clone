@@ -7,15 +7,22 @@ import TweetAddBtn from "../components/TweetAddBtn";
 export default function HomeScreen({ navigation }) {
   const [tweets, setTweets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const getAllTweets = async () => {
     try {
       const res = await axios.get("http://localhost:8000/api/tweets");
       setTweets(res.data);
       setIsLoading(false);
+      setIsRefreshing(false);
     } catch (err) {
       console.log(err);
       setIsLoading(false);
     }
+  };
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    getAllTweets();
   };
   useEffect(() => {
     getAllTweets();
@@ -33,6 +40,8 @@ export default function HomeScreen({ navigation }) {
         ></ActivityIndicator>
       ) : (
         <FlatList
+          onRefresh={handleRefresh}
+          refreshing={isRefreshing}
           ItemSeparatorComponent={() => <View style={styles.seperator}></View>}
           data={tweets}
           renderItem={renderItem}
