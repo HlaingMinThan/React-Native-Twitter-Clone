@@ -1,17 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View, ActivityIndicator } from "react-native";
 import Tweet from "../components/Tweet";
-
 import axios from "axios";
 import TweetAddBtn from "../components/TweetAddBtn";
+
 export default function HomeScreen({ navigation }) {
   const [tweets, setTweets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isEndScrollLoading, setIsEndScrollLoading] = useState(false);
+  const [page, setPage] = useState(1);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  useEffect(() => {
+    getAllTweets();
+  }, [page]);
+
   const getAllTweets = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/tweets");
-      setTweets(res.data);
+      const res = await axios.get(
+        `http://localhost:8000/api/tweets?page=${page}`
+      );
+      /**----- handle no more data for new page---- */
+      if (res.data.next_page_url === null) {
+        setIsEndScrollLoading(false);
+      }
+      if (page === 1) {
+        setTweets(res.data.data);
+      } else {
+        setTweets((prev) => [...prev, ...res.data.data]);
+      }
       setIsLoading(false);
       setIsRefreshing(false);
     } catch (err) {
@@ -21,15 +38,17 @@ export default function HomeScreen({ navigation }) {
   };
 
   const handleRefresh = () => {
+    setPage(1);
+    getAllTweets(); //this is added because if the page is already 1 ,this function will not automatically call with useEffect
     setIsRefreshing(true);
-    getAllTweets();
+    setIsEndScrollLoading(false);
   };
-  useEffect(() => {
-    getAllTweets();
-  }, []);
-  const renderItem = ({ item }) => (
-    <Tweet tweet={item} navigation={navigation} />
-  );
+
+  const handleEndReached = () => {
+    setIsEndScrollLoading(true);
+    setPage((prev) => prev + 1);
+  };
+
   return (
     <View style={styles.container}>
       {isLoading ? (
@@ -44,8 +63,21 @@ export default function HomeScreen({ navigation }) {
           refreshing={isRefreshing}
           ItemSeparatorComponent={() => <View style={styles.seperator}></View>}
           data={tweets}
-          renderItem={renderItem}
+          renderItem={({ item }) => (
+            <Tweet tweet={item} navigation={navigation} />
+          )}
           keyExtractor={(tweet) => tweet.id}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0} //how far from bottom of the lists
+          ListFooterComponent={
+            isEndScrollLoading && (
+              <ActivityIndicator
+                color="#0092ef"
+                size="large"
+                style={styles.loading}
+              ></ActivityIndicator>
+            )
+          }
         />
       )}
       <TweetAddBtn />
