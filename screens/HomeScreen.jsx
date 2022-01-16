@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import Tweet from "../components/Tweet";
 import Loading from "../components/Loading";
-import axios from "axios";
+import axios from "../helpers/axios";
 import TweetAddBtn from "../components/TweetAddBtn";
 
 export default function HomeScreen({ navigation }) {
@@ -18,9 +18,7 @@ export default function HomeScreen({ navigation }) {
 
   const getAllTweets = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8000/api/tweets?page=${page}`
-      );
+      const res = await axios.get(`/api/tweets?page=${page}`);
       /**----- handle no more data for new page---- */
       if (res.data.next_page_url === null) {
         setIsEndScrollLoading(false);
