@@ -1,26 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, Image } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
-export default function TweetDetailScreen({ navigation }) {
+import axios from "../helpers/axios";
+import Loading from "../components/Loading";
+export default function TweetDetailScreen({ route, navigation }) {
+  const tweetId = route.params.tweetId;
+  const [tweet, setTweet] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const getTweet = async () => {
+    const res = await axios.get(`/tweets/${tweetId}`);
+    setTweet(res.data);
+    setIsLoading(false);
+  };
+  useEffect(() => {
+    getTweet();
+  }, [tweetId]);
   const goToProfile = () => {
     navigation.navigate("Profile");
   };
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <View style={styles.container}>
       <View style={styles.tweetHeader}>
         <View style={styles.userInfoContainer}>
           <TouchableOpacity onPress={goToProfile}>
             <Image
-              source={{ uri: `https://reactjs.org/logo-og.png` }}
+              source={{ uri: tweet.user.avatar }}
               style={styles.avatar}
             ></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={goToProfile}>
             <View style={styles.namesContainer}>
-              <Text style={styles.name}>Faizal</Text>
-              <Text style={styles.username}>@faizal</Text>
+              <Text style={styles.name}>{tweet.user.name}</Text>
+              <Text style={styles.username}>@{tweet.user.username}</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -29,12 +44,7 @@ export default function TweetDetailScreen({ navigation }) {
         </View>
       </View>
       <View style={styles.tweetBodyContainer}>
-        <Text style={styles.tweetBody}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae eaque
-          distinctio, excepturi est obcaecati illo non, omnis labore quo culpa
-          dolorem atque velit accusamus! Voluptatum dignissimos accusamus animi.
-          Aspernatur, vel.
-        </Text>
+        <Text style={styles.tweetBody}>{tweet.body}</Text>
       </View>
       <View style={styles.seperator} />
       <View style={styles.tweetEngagementContainer}>

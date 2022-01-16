@@ -18,7 +18,7 @@ export default function HomeScreen({ navigation }) {
 
   const getAllTweets = async () => {
     try {
-      const res = await axios.get(`/api/tweets?page=${page}`);
+      const res = await axios.get(`/tweets?page=${page}`);
       /**----- handle no more data for new page---- */
       if (res.data.next_page_url === null) {
         setIsEndScrollLoading(false);

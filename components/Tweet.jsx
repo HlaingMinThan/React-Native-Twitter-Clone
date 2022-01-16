@@ -10,8 +10,8 @@ export default function Tweet({ tweet, navigation }) {
   const goToProfile = () => {
     navigation.navigate("Profile");
   };
-  const goToTweetDetail = () => {
-    navigation.navigate("Tweet Detail");
+  const goToTweetDetail = (tweetId) => {
+    navigation.navigate("Tweet Detail", { tweetId });
   };
   return (
     <View style={styles.tweetContainer}>
@@ -41,7 +41,7 @@ export default function Tweet({ tweet, navigation }) {
           </Text>
         </View>
         <View>
-          <TouchableOpacity onPress={goToTweetDetail}>
+          <TouchableOpacity onPress={() => goToTweetDetail(tweet.id)}>
             <Text style={styles.tweetContent} numberOfLines={3}>
               {tweet.body}
             </Text>
@@ -50,7 +50,7 @@ export default function Tweet({ tweet, navigation }) {
         {/* comment */}
         <View style={styles.tweetActionsContainer}>
           <TouchableOpacity
-            onPress={goToTweetDetail}
+            onPress={() => goToTweetDetail(tweet.id)}
             style={styles.tweetAction}
           >
             <View style={styles.iconContainer}>
@@ -60,7 +60,7 @@ export default function Tweet({ tweet, navigation }) {
           </TouchableOpacity>
           {/* retweet */}
           <TouchableOpacity
-            onPress={goToTweetDetail}
+            onPress={() => goToTweetDetail(tweet.id)}
             style={styles.tweetAction}
           >
             <View style={styles.iconContainer}>
@@ -70,7 +70,7 @@ export default function Tweet({ tweet, navigation }) {
           </TouchableOpacity>
           {/* Heart */}
           <TouchableOpacity
-            onPress={goToTweetDetail}
+            onPress={() => goToTweetDetail(tweet.id)}
             style={styles.tweetAction}
           >
             <View style={styles.iconContainer}>
@@ -80,7 +80,7 @@ export default function Tweet({ tweet, navigation }) {
           </TouchableOpacity>
           {/* share */}
           <TouchableOpacity
-            onPress={goToTweetDetail}
+            onPress={() => goToTweetDetail(tweet.id)}
             style={styles.tweetAction}
           >
             <View style={styles.iconContainer}>
