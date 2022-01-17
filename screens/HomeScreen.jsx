@@ -1,20 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import Tweet from "../components/Tweet";
 import Loading from "../components/Loading";
 import axios from "../helpers/axios";
 import TweetAddBtn from "../components/TweetAddBtn";
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ route, navigation }) {
   const [tweets, setTweets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isEndScrollLoading, setIsEndScrollLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  const flatListRef = useRef();
   useEffect(() => {
     getAllTweets();
   }, [page]);
+
+  /**----- when new tweet is added ------ */
+  useEffect(() => {
+    getAllTweetsRefresh();
+    flatListRef.current?.scrollToOffset({ offset: 0 });
+  }, [route.params?.newTweetAdded]);
 
   const getAllTweets = async () => {
     try {
@@ -36,6 +43,19 @@ export default function HomeScreen({ navigation }) {
     }
   };
 
+  const getAllTweetsRefresh = async () => {
+    try {
+      const res = await axios.get(`/tweets`);
+      setTweets(res.data.data);
+      setIsLoading(false);
+      setIsRefreshing(false);
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+      setIsRefreshing(false);
+    }
+  };
+
   const pullToRefresh = () => {
     setPage(1);
     getAllTweets(); //this is added because if the page is already 1 ,this function will not automatically call with useEffect
@@ -54,6 +74,7 @@ export default function HomeScreen({ navigation }) {
         <Loading />
       ) : (
         <FlatList
+          ref={flatListRef}
           onRefresh={pullToRefresh}
           refreshing={isRefreshing}
           ItemSeparatorComponent={() => <View style={styles.seperator}></View>}
@@ -67,7 +88,7 @@ export default function HomeScreen({ navigation }) {
           ListFooterComponent={isEndScrollLoading && <Loading />}
         />
       )}
-      <TweetAddBtn />
+      <TweetAddBtn navigation={navigation} />
     </View>
   );
 }

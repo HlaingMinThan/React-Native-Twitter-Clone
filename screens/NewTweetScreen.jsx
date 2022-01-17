@@ -7,11 +7,25 @@ import {
   Image,
   TextInput,
 } from "react-native";
+import axios from "../helpers/axios";
+import Loading from "../components/Loading";
 
 export default function NewTweetScreen({ navigation }) {
   const [tweet, setTweet] = useState("");
-  const postTweet = () => {
-    navigation.navigate("Tab");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const postTweet = async () => {
+    if (!tweet.length) {
+      return;
+    }
+    setIsLoading(true);
+    const res = await axios.post("/tweets", {
+      body: tweet,
+    });
+    setIsLoading(false);
+    navigation.navigate("Home1", {
+      newTweetAdded: res.data,
+    });
   };
   return (
     <View style={styles.container}>
@@ -19,9 +33,12 @@ export default function NewTweetScreen({ navigation }) {
         <Text style={tweet.length > 250 ? styles.textRed : styles.textGray}>
           Characters left : {280 - tweet.length}
         </Text>
-        <TouchableOpacity style={styles.tweetBtn} onPress={postTweet}>
-          <Text style={styles.tweetBtnText}>Tweet</Text>
-        </TouchableOpacity>
+        <View style={{ display: "flex", flexDirection: "row" }}>
+          {isLoading && <Loading size="small" style={{ marginRight: 10 }} />}
+          <TouchableOpacity style={styles.tweetBtn} onPress={postTweet}>
+            <Text style={styles.tweetBtnText}>Tweet</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.newTweetBody}>
         <Image

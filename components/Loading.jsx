@@ -1,10 +1,10 @@
 import { ActivityIndicator, StyleSheet } from "react-native";
-export default function Loading() {
+export default function Loading({ size, style }) {
   return (
     <ActivityIndicator
       color="#0092ef"
-      size="large"
-      style={styles.loading}
+      size={size ? size : "large"}
+      style={{ ...styles.loading, ...style }}
     ></ActivityIndicator>
   );
 }
