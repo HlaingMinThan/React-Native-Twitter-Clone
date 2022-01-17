@@ -1,7 +1,24 @@
 import ProfileHeader from "../components/ProfileHeader";
 import { FlatList, View, StyleSheet } from "react-native";
 import Tweet from "../components/Tweet";
-export default function ProfileScreen({ navigation }) {
+import { useEffect, useState } from "react";
+import axios from "../helpers/axios";
+export default function ProfileScreen({ route, navigation }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    getUserInfo();
+  }, [route.params.userId]);
+
+  async function getUserInfo() {
+    try {
+      let res = await axios.get(`/users/${route.params.userId}`);
+      setUser(res.data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   const tweets = [
     {
       id: 1,
@@ -57,7 +74,7 @@ export default function ProfileScreen({ navigation }) {
       data={tweets}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
-      ListHeaderComponent={ProfileHeader} //nest ProfileHeader in FlatList Scroll
+      ListHeaderComponent={<ProfileHeader user={user} loading={loading} />} //nest ProfileHeader in FlatList Scroll
       ItemSeparatorComponent={() => <View style={styles.seperator}></View>}
     />
   );

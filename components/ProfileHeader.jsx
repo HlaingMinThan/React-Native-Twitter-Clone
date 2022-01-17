@@ -1,11 +1,16 @@
 import { EvilIcons } from "@expo/vector-icons";
+import { format } from "date-fns";
+import moment from "moment";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-export default function ProfileHeader() {
+import Loading from "./Loading";
+export default function ProfileHeader({ user, loading }) {
   const goToWebsite = async (link) => {
     // await Linking.openURL(`https://${link}`);
   };
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <View style={styles.container}>
       <Image
         style={styles.backgroundImage}
@@ -16,7 +21,7 @@ export default function ProfileHeader() {
       <View style={styles.profileContainer}>
         <Image
           source={{
-            uri: `https://i.pravatar.cc/150?img=39`,
+            uri: user.avatar,
           }}
           style={styles.avatar}
         ></Image>
@@ -25,17 +30,14 @@ export default function ProfileHeader() {
         </TouchableOpacity>
       </View>
       <View style={styles.userInfoContainer}>
-        <Text style={[styles.name, styles.fontBold]}>Hlaing Min Than</Text>
-        <Text style={styles.textGray}>@faizal</Text>
-        <Text style={styles.description}>
-          I'm Passionate Developer who is working at Proptexx,Real Estate
-          Platform of Thailand.
-        </Text>
+        <Text style={[styles.name, styles.fontBold]}>{user.name}</Text>
+        <Text style={styles.textGray}>@{user.username}</Text>
+        <Text style={styles.description}>{user.description}</Text>
       </View>
       <View style={styles.userOtherInfoContainer}>
         <View style={[styles.flexRow, styles.mb5]}>
           <EvilIcons name="location" size={24} color="gray" />
-          <Text style={styles.textGray}>Yangon,Myanmar</Text>
+          <Text style={styles.textGray}>{user.location}</Text>
         </View>
         <View style={styles.flexRow}>
           <View style={styles.flexRow}>
@@ -46,7 +48,9 @@ export default function ProfileHeader() {
           </View>
           <View style={[styles.flexRow, styles.ml5]}>
             <EvilIcons name="calendar" size={24} color="gray" />
-            <Text style={styles.textGray}>Joined March 2017</Text>
+            <Text style={styles.textGray}>
+              Joined {moment(user.created_at).format("MMMM yyyy")}
+            </Text>
           </View>
         </View>
         <View style={[styles.flexRow, styles.mt10]}>

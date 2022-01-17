@@ -7,8 +7,10 @@ import formatDistance from "../helpers/formatDistance";
 import locale from "date-fns/locale/en-US";
 
 export default function Tweet({ tweet, navigation }) {
-  const goToProfile = () => {
-    navigation.navigate("Profile");
+  const goToProfile = (userId) => {
+    navigation.navigate("Profile", {
+      userId,
+    });
   };
   const goToTweetDetail = (tweetId) => {
     navigation.navigate("Tweet Detail", { tweetId });
@@ -16,7 +18,7 @@ export default function Tweet({ tweet, navigation }) {
   return (
     <View style={styles.tweetContainer}>
       <View style={styles.tweetAvatarContainer}>
-        <TouchableOpacity onPress={goToProfile}>
+        <TouchableOpacity onPress={() => goToProfile(tweet.user.id)}>
           <Image
             source={{ uri: tweet.user.avatar }}
             style={styles.avatar}
@@ -25,10 +27,10 @@ export default function Tweet({ tweet, navigation }) {
       </View>
       <View style={styles.tweetInfoContainer}>
         <View style={styles.tweetMetaContainer}>
-          <TouchableOpacity onPress={goToProfile}>
+          <TouchableOpacity onPress={() => goToProfile(tweet.user.id)}>
             <Text style={styles.name}>{tweet.user.name}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={goToProfile}>
+          <TouchableOpacity onPress={() => goToProfile(tweet.user.id)}>
             <Text style={styles.tweetMeta}>@{tweet.user.username}</Text>
           </TouchableOpacity>
           <Text style={styles.tweetMeta}>
