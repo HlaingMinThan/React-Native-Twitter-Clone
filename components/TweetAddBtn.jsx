@@ -1,7 +1,9 @@
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
-export default function TweetAddBtn({ navigation }) {
+import { useNavigation } from "@react-navigation/native";
+export default function TweetAddBtn() {
+  const navigation = useNavigation();
   const goToNewTweet = () => {
     navigation.navigate("New Tweet");
   };

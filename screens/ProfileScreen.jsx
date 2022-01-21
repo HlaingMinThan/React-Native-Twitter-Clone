@@ -6,13 +6,14 @@ import axios from "../helpers/axios";
 export default function ProfileScreen({ route, navigation }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const userId = route.params ? route.params.userId : 1; //1 will be auth user id
   useEffect(() => {
     getUserInfo();
-  }, [route.params.userId]);
+  }, [userId]);
 
   async function getUserInfo() {
     try {
-      let res = await axios.get(`/users/${route.params.userId}`);
+      let res = await axios.get(`/users/${userId}`);
       setUser(res.data);
       setLoading(false);
     } catch (error) {
@@ -65,7 +66,7 @@ export default function ProfileScreen({ route, navigation }) {
   ];
   const renderItem = ({ item, index }) => (
     <View style={[styles.ml10, index === 0 ? styles.mt10 : ""]}>
-      <Tweet tweet={item} navigation={navigation} />
+      <Tweet tweet={item} />
     </View>
   );
   return (

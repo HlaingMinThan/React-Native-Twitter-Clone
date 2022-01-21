@@ -5,8 +5,10 @@ import { TouchableOpacity } from "react-native";
 import { formatDistanceToNowStrict } from "date-fns";
 import formatDistance from "../helpers/formatDistance";
 import locale from "date-fns/locale/en-US";
+import { useNavigation } from "@react-navigation/native";
 
-export default function Tweet({ tweet, navigation }) {
+export default function Tweet({ tweet }) {
+  const navigation = useNavigation();
   const goToProfile = (userId) => {
     navigation.navigate("Profile", {
       userId,

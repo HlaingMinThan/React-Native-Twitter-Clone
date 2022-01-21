@@ -79,16 +79,14 @@ export default function HomeScreen({ route, navigation }) {
           refreshing={isRefreshing}
           ItemSeparatorComponent={() => <View style={styles.seperator}></View>}
           data={tweets}
-          renderItem={({ item }) => (
-            <Tweet tweet={item} navigation={navigation} />
-          )}
+          renderItem={({ item }) => <Tweet tweet={item} />}
           keyExtractor={(tweet) => tweet.id}
           onEndReached={handleEndReached}
           onEndReachedThreshold={0} //how far from bottom of the lists
           ListFooterComponent={isEndScrollLoading && <Loading />}
         />
       )}
-      <TweetAddBtn navigation={navigation} />
+      <TweetAddBtn />
     </View>
   );
 }
