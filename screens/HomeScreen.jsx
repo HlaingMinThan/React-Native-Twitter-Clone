@@ -1,16 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import Tweet from "../components/Tweet";
 import Loading from "../components/Loading";
-import axios from "../helpers/axios";
+import Tweet from "../components/Tweet";
 import TweetAddBtn from "../components/TweetAddBtn";
-
-export default function HomeScreen({ route, navigation }) {
-  const [tweets, setTweets] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isEndScrollLoading, setIsEndScrollLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+import axios from "../helpers/axios";
+export default function HomeScreen({ route }) {
+  let [tweets, setTweets] = useState([]);
+  let [isLoading, setIsLoading] = useState(true);
+  let [showScrollLoading, setShowScrollLoading] = useState(false);
+  let [page, setPage] = useState(1);
+  let [isRefreshing, setIsRefreshing] = useState(false);
 
   const flatListRef = useRef();
   useEffect(() => {
@@ -25,10 +24,11 @@ export default function HomeScreen({ route, navigation }) {
 
   const getAllTweets = async () => {
     try {
+      setShowScrollLoading(true);
       const res = await axios.get(`/tweets?page=${page}`);
       /**----- handle no more data for new page---- */
       if (res.data.next_page_url === null) {
-        setIsEndScrollLoading(false);
+        setShowScrollLoading(false);
       }
       if (page === 1) {
         setTweets(res.data.data);
@@ -60,12 +60,13 @@ export default function HomeScreen({ route, navigation }) {
     setPage(1);
     getAllTweets(); //this is added because if the page is already 1 ,this function will not automatically call with useEffect
     setIsRefreshing(true);
-    setIsEndScrollLoading(false);
+    setShowScrollLoading(false);
   };
 
   const handleEndReached = () => {
-    setIsEndScrollLoading(true);
-    setPage((prev) => prev + 1);
+    if (showScrollLoading) {
+      setPage((prev) => prev + 1);
+    }
   };
 
   return (
@@ -79,11 +80,13 @@ export default function HomeScreen({ route, navigation }) {
           refreshing={isRefreshing}
           ItemSeparatorComponent={() => <View style={styles.seperator}></View>}
           data={tweets}
-          renderItem={({ item }) => <Tweet tweet={item} />}
+          renderItem={({ item: tweet }) => (
+            <Tweet tweet={tweet} user={tweet.user} />
+          )}
           keyExtractor={(tweet) => tweet.id}
           onEndReached={handleEndReached}
           onEndReachedThreshold={0} //how far from bottom of the lists
-          ListFooterComponent={isEndScrollLoading && <Loading />}
+          ListFooterComponent={showScrollLoading && <Loading />}
         />
       )}
       <TweetAddBtn />

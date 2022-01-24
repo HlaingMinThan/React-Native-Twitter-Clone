@@ -7,7 +7,7 @@ import formatDistance from "../helpers/formatDistance";
 import locale from "date-fns/locale/en-US";
 import { useNavigation } from "@react-navigation/native";
 
-export default function Tweet({ tweet }) {
+export default function Tweet({ tweet, user }) {
   const navigation = useNavigation();
   const goToProfile = (userId) => {
     navigation.navigate("Profile", {
@@ -20,20 +20,17 @@ export default function Tweet({ tweet }) {
   return (
     <View style={styles.tweetContainer}>
       <View style={styles.tweetAvatarContainer}>
-        <TouchableOpacity onPress={() => goToProfile(tweet.user.id)}>
-          <Image
-            source={{ uri: tweet.user.avatar }}
-            style={styles.avatar}
-          ></Image>
+        <TouchableOpacity onPress={() => goToProfile(user.id)}>
+          <Image source={{ uri: user.avatar }} style={styles.avatar}></Image>
         </TouchableOpacity>
       </View>
       <View style={styles.tweetInfoContainer}>
         <View style={styles.tweetMetaContainer}>
-          <TouchableOpacity onPress={() => goToProfile(tweet.user.id)}>
-            <Text style={styles.name}>{tweet.user.name}</Text>
+          <TouchableOpacity onPress={() => goToProfile(user.id)}>
+            <Text style={styles.name}>{user.name}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => goToProfile(tweet.user.id)}>
-            <Text style={styles.tweetMeta}>@{tweet.user.username}</Text>
+          <TouchableOpacity onPress={() => goToProfile(user.id)}>
+            <Text style={styles.tweetMeta}>@{user.username}</Text>
           </TouchableOpacity>
           <Text style={styles.tweetMeta}>
             {formatDistanceToNowStrict(new Date(tweet.created_at), {

@@ -1,16 +1,13 @@
 import { EvilIcons } from "@expo/vector-icons";
-import { format } from "date-fns";
 import moment from "moment";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Loading from "./Loading";
-export default function ProfileHeader({ user, loading }) {
+
+export default function ProfileHeader({ user }) {
   const goToWebsite = async (link) => {
     // await Linking.openURL(`https://${link}`);
   };
-  return loading ? (
-    <Loading />
-  ) : (
+  return (
     <View style={styles.container}>
       <Image
         style={styles.backgroundImage}
